@@ -11,9 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && $path === '/get_cottages') {
     // Вывод всех коттеджей
 
     $stmt = $pdo->query("SELECT * FROM cottage_house");
-    $cottages = $stmt->fetchAll();
-
-    echo json_encode($cottages);
+    echo json_encode($stmt->fetchAll());
 }
 else if ($_SERVER['REQUEST_METHOD'] === 'GET' && $path === '/get_cottage') {
     // Вывод определенного коттеджа по id
@@ -29,7 +27,7 @@ else if ($_SERVER['REQUEST_METHOD'] === 'GET' && $path === '/get_cottage') {
         echo json_encode(array('error' => 'Enter the cottage\'s id'));
     }
 } 
-else if ($_SERVER['REQUEST_METHOD'] === 'GET' && $path === '/get_bookings') {
+else if ($_SERVER['REQUEST_METHOD'] === 'GET' && $path === '/get_booking_dates') {
     // Вывод бронирования на 3 месяца для определенного коттеджа
 
     if (isset($_GET['id'])) {
@@ -47,7 +45,13 @@ else if ($_SERVER['REQUEST_METHOD'] === 'GET' && $path === '/get_bookings') {
         http_response_code(400);
         echo json_encode(array('error' => 'Enter the cottage\'s id'));
     }
-} 
+}
+else if ($_SERVER['REQUEST_METHOD'] === 'GET' && $path === '/get_bookings') {
+    // Вывод всех бронирований на будущий период (актуальные бронирования)
+
+    $stmt = $pdo->query("SELECT * FROM cottage_booking WHERE booking_start_at >= CURRENT_DATE");
+    echo json_encode($stmt->fetchAll());
+}
 else {
     http_response_code(404);
     echo json_encode(array('error' => 'Page not found'));
