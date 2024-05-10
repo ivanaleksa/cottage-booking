@@ -36,7 +36,8 @@ else if ($_SERVER['REQUEST_METHOD'] === 'GET' && $path === '/get_bookings') {
         $stmt = $pdo->prepare("SELECT booking_start_at, booking_end_at
                                 FROM cottage_booking
                                 WHERE cottage_id = :cottage_id AND
-                                        booking_start_at BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '3 months'");
+                                        booking_start_at BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '3 months'
+                                        AND booking_confirmation_date IS NOT NULL");
         $stmt->bindParam(':cottage_id', $_GET['id']);
         $stmt->execute();
 
