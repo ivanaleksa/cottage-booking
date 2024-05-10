@@ -1,0 +1,1 @@
+pgsql:host=localhost;port=5432;dbname=dbname;user=postgres;password=your_password
