@@ -138,6 +138,26 @@ else if ($_SERVER['REQUEST_METHOD'] === 'DELETE' && $path === '/delete_booking')
         echo json_encode(array('error' => 'Booking ID is required'));
     }
 }
+else if ($_SERVER['REQUEST_METHOD'] === 'PATCH' && strpos($_SERVER['REQUEST_URI'], '/update_booking/') !== false) {
+    // Обновление бронирования
+
+    $bookingId = substr($path, strlen('/update_booking/'));
+
+    if (isset($bookingId)) {
+        $stmt = $pdo->prepare("UPDATE cottage_booking SET booking_confirmation_date = CURRENT_DATE WHERE booking_id = :id");
+        $stmt->bindParam(':id', $bookingId);
+
+        if ($stmt->execute()) {
+            echo json_encode(array('status' => 'ok'));
+        } else {
+            http_response_code(500);
+            echo json_encode(array('error' => 'Failed to update booking'));
+        }
+    } else {
+        http_response_code(400);
+        echo json_encode(array('error' => 'Id is required'));
+    }
+}
 else {
     http_response_code(404);
     echo json_encode(array('error' => 'Page not found'));
