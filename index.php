@@ -47,9 +47,9 @@ else if ($_SERVER['REQUEST_METHOD'] === 'GET' && $path === '/get_booking_dates')
     }
 }
 else if ($_SERVER['REQUEST_METHOD'] === 'GET' && $path === '/get_bookings') {
-    // Вывод всех бронирований на будущий период (актуальные бронирования)
+    // Вывод всех бронирований для административной панели
 
-    $stmt = $pdo->query("SELECT * FROM cottage_booking WHERE booking_start_at >= CURRENT_DATE");
+    $stmt = $pdo->query("SELECT * FROM cottage_booking");
     echo json_encode($stmt->fetchAll());
 }
 else {
