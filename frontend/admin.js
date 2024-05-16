@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
             row.innerHTML = `
                 <td>${booking.booking_id}</td>
                 <td>${booking.cottage_id}</td>
+                <td>${booking.cottage_name}</td>
                 <td>${booking.client_name}</td>
                 <td>${booking.client_phone_number}</td>
                 <td>${booking.booking_start_at}</td>

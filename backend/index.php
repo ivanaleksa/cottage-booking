@@ -107,7 +107,10 @@ else if ($method === 'GET' && $path === '/get_booking_dates') {
 else if ($method === 'GET' && $path === '/get_bookings') {
     checkAuth($pdo);
 
-    $stmt = $pdo->query("SELECT * FROM cottage_booking");
+    $stmt = $pdo->query("SELECT booking_id, cottage_booking.cottage_id as cottage_id, cottage_name, client_name, client_phone_number, 
+                                booking_start_at, booking_end_at, booking_confirmation_date
+                            FROM cottage_booking 
+                            JOIN cottage_house ON cottage_house.cottage_id = cottage_booking.cottage_id;");
     echo json_encode($stmt->fetchAll());
 } 
 else if ($method === 'POST' && $path === '/add_booking') {
