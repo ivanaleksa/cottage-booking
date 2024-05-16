@@ -3,6 +3,7 @@
 include __DIR__ . '/db_conn.php';
 $pdo = connect_to_db();
 
+header("Access-Control-Allow-Origin: *");
 header('Content-Type: application/json');
 
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
