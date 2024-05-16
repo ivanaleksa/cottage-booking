@@ -103,10 +103,17 @@ function generateMonthTable(month, bookingDates) {
 }
 
 function isDateBooked(date, bookingDates) {
+    const currentDate = new Date(date.getFullYear(), date.getMonth(), date.getDate()); // Учитываем только дату
+
     return bookingDates.some(booking => {
         const start = new Date(booking.booking_start_at);
         const end = new Date(booking.booking_end_at);
-        return date >= start && date <= end;
+
+        // Учитываем только дату
+        const bookingStartDate = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+        const bookingEndDate = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+
+        return currentDate >= bookingStartDate && currentDate <= bookingEndDate;
     });
 }
 
