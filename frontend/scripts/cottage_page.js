@@ -121,16 +121,15 @@ function isDateRangeBooked(startDate, endDate, bookingDates) {
     const start = new Date(startDate);
     const end = new Date(endDate);
 
-    if (start > end) {
-        return true;
-    }
-    else {
-        return bookingDates.some(booking => {
-            const bookingStart = new Date(booking.booking_start_at);
-            const bookingEnd = new Date(booking.booking_end_at);
-            return (start <= bookingEnd && end >= bookingStart);
-        });
-    }
+    return bookingDates.some(booking => {
+        const bookingStart = new Date(booking.booking_start_at);
+        const bookingEnd = new Date(booking.booking_end_at);
+        return (start <= bookingEnd && end >= bookingStart);
+    });
+}
+
+function isDateCorrect(startDate, endDate) {
+    return (startDate > endDate) ? false : true;
 }
 
 async function submitBooking(cottageId) {
@@ -141,6 +140,11 @@ async function submitBooking(cottageId) {
 
     if (isDateRangeBooked(startDate, endDate, bookingDates)) {
         alert('Selected dates overlap with existing bookings. Please choose different dates.');
+        return;
+    }
+
+    if (!isDateCorrect(startDate, endDate)) {
+        alert('Please, make sure that the start date comes first');
         return;
     }
 
