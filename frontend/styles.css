@@ -1,0 +1,23 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.cottage {
+    border: 3px solid skyblue;
+    border-image: linear-gradient(to right top, rgb(85, 147, 241), skyblue, rgb(0, 197, 131));
+    border-image-slice: 1;
+    padding: 10px;
+    margin: 10px;
+    cursor: pointer;
+    width: 30%;
+}
+
+.cottage:hover {
+    color: rgb(3, 199, 199);
+}
+
+#cottages-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
