@@ -22,21 +22,9 @@ function displayCottages(cottages) {
         const cottageDiv = document.createElement('div');
         cottageDiv.className = 'cottage';
         cottageDiv.textContent = `${cottage.cottage_name} - ${cottage.cottage_address}`;
-        cottageDiv.addEventListener('click', () => fetchCottageDetails(cottage.cottage_id));
+        cottageDiv.addEventListener('click', () => {
+            window.location.href = `cottage_page.html?cottage_id=${cottage.cottage_id}`;
+        });
         cottagesList.appendChild(cottageDiv);
     });
-}
-
-// Fetch and display details of a selected cottage
-async function fetchCottageDetails(cottageId) {
-    try {
-        const response = await fetch(backUrl + `get_cottage?id=${cottageId}`);
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        const cottageDetails = await response.json();
-        alert(`Cottage Name: ${cottageDetails.cottage_name}\nAddress: ${cottageDetails.cottage_address}\nDescription: ${cottageDetails.cottage_description}`);
-    } catch (error) {
-        console.error('Error fetching cottage details:', error);
-    }
 }
