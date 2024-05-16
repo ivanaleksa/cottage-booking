@@ -68,11 +68,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) {
                 if (response.status === 403) {
                     window.location.href = '/login.html';
-                } else {
+                } 
+                else if (response.status === 405) {
+                    alert("Данная дата уже была занята.");
+                }else {
                     throw new Error('Failed to update bookings');
                 }
+            } else {
+                fetchBookings();
             }
-            fetchBookings();
         } catch (error) {
             console.error('Error confirming booking:', error);
         }

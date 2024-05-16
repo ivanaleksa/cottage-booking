@@ -154,6 +154,45 @@ else if ($method === 'PATCH' && strpos($_SERVER['REQUEST_URI'], '/update_booking
 
     $bookingId = substr($path, strlen('/update_booking/'));
     if (isset($bookingId)) {
+        $stmt = $pdo->prepare("SELECT * FROM cottage_booking WHERE booking_id = :id");
+        $stmt->bindParam(':id', $bookingId);
+        $stmt->execute();
+        $booking = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$booking) {
+            http_response_code(404);
+            echo json_encode(array('error' => 'Booking not found'));
+            return;
+        }
+
+        $stmt = $pdo->prepare("SELECT * FROM cottage_house WHERE cottage_id = :id");
+        $stmt->bindParam(':id', $booking['cottage_id']);
+        $stmt->execute();
+        $cottage = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$cottage) {
+            http_response_code(404);
+            echo json_encode(array('error' => 'Cottage not found'));
+            return;
+        }
+
+        $stmt = $pdo->prepare("SELECT * FROM cottage_booking WHERE cottage_id = :cottage_id AND booking_confirmation_date IS NOT NULL");
+        $stmt->bindParam(':cottage_id', $cottage['cottage_id']);
+        $stmt->execute();
+        $bookings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $start = strtotime($booking['booking_start_at']);
+        $end = strtotime($booking['booking_end_at']);
+        foreach ($bookings as $existingBooking) {
+            $existingStart = strtotime($existingBooking['booking_start_at']);
+            $existingEnd = strtotime($existingBooking['booking_end_at']);
+            if (!($end < $existingStart || $start > $existingEnd)) {
+                http_response_code(405);
+                echo json_encode(array('error' => 'Selected dates overlap with existing bookings'));
+                return;
+            }
+        }
+
         $stmt = $pdo->prepare("UPDATE cottage_booking SET booking_confirmation_date = CURRENT_DATE WHERE booking_id = :id");
         $stmt->bindParam(':id', $bookingId);
         if ($stmt->execute()) {
@@ -166,7 +205,8 @@ else if ($method === 'PATCH' && strpos($_SERVER['REQUEST_URI'], '/update_booking
         http_response_code(400);
         echo json_encode(array('error' => 'Id is required'));
     }
-} 
+}
+
 else {
     http_response_code(404);
     echo json_encode(array('error' => 'Page not found'));
