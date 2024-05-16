@@ -22,3 +22,5 @@ CREATE TABLE admins (
     admin_login varchar(50),
     admin_password text
 );
+
+ALTER TABLE admins ADD token text;

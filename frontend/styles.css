@@ -93,3 +93,15 @@ body {
 #sbm-btn:hover {
     opacity: 0.5;
 }
+
+.admin-link {
+    text-decoration: none;
+    color: #000000;
+    font: 1em sans-serif;
+    position: absolute;
+}
+
+.admin-link:hover {
+    color: aquamarine;
+}
+

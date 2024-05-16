@@ -1,15 +1,19 @@
 <?php
 
 include __DIR__ . '/db_conn.php';
+include __DIR__ . '/auth.php';
+
 $pdo = connect_to_db();
 
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, OPTIONS');
+header('Access-Control-Allow-Origin: http://localhost:8000');
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Methods: PUT, GET, POST, DELETE, PATCH, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, X-Requested-With');
 header('Content-Type: application/json');
 
 $method = $_SERVER['REQUEST_METHOD'];
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
 
 if ($method === 'OPTIONS') {
     http_response_code(204);
@@ -28,7 +32,14 @@ if ($method === 'POST' && $path === '/login') {
         $admin = $stmt->fetch();
 
         if ($admin && password_verify($password, $admin['admin_password'])) {
-            echo json_encode(array('status' => 'ok'));
+            $token = bin2hex(random_bytes(16));
+            setcookie('admin_token', $token, time() + 3600, "/");
+            $stmt = $pdo->prepare("UPDATE admins SET token = :token WHERE admin_login = :login");
+            $stmt->bindParam(':token', $token);
+            $stmt->bindParam(':login', $login);
+            $stmt->execute();
+
+            echo json_encode(array('status' => 'ok', 'token' => $token));
         } else {
             http_response_code(401);
             echo json_encode(array('error' => 'Invalid credentials'));
@@ -37,7 +48,12 @@ if ($method === 'POST' && $path === '/login') {
         http_response_code(400);
         echo json_encode(array('error' => 'Login and password are required'));
     }
-} else if ($method === 'POST' && $path === '/register') {
+} 
+else if ($method === 'POST' && $path === '/logout') {
+    setcookie('admin_token', '', time() - 3600);
+    echo json_encode(array('status' => 'logged out'));
+} 
+else if ($method === 'POST' && $path === '/register') {
     $data = json_decode(file_get_contents('php://input'), true);
     if (isset($data['login']) && isset($data['password'])) {
         $login = $data['login'];
@@ -57,10 +73,12 @@ if ($method === 'POST' && $path === '/login') {
         http_response_code(400);
         echo json_encode(array('error' => 'Login and password are required'));
     }
-} else if ($method === 'GET' && $path === '/get_cottages') {
+}
+else if ($method === 'GET' && $path === '/get_cottages') {
     $stmt = $pdo->query("SELECT * FROM cottage_house");
     echo json_encode($stmt->fetchAll());
-} else if ($method === 'GET' && $path === '/get_cottage') {
+} 
+else if ($method === 'GET' && $path === '/get_cottage') {
     if (isset($_GET['id'])) {
         $stmt = $pdo->prepare("SELECT * FROM cottage_house WHERE cottage_id = :id");
         $stmt->bindParam(':id', $_GET['id']);
@@ -70,7 +88,8 @@ if ($method === 'POST' && $path === '/login') {
         http_response_code(400);
         echo json_encode(array('error' => 'Enter the cottage\'s id'));
     }
-} else if ($method === 'GET' && $path === '/get_booking_dates') {
+} 
+else if ($method === 'GET' && $path === '/get_booking_dates') {
     if (isset($_GET['id'])) {
         $stmt = $pdo->prepare("SELECT booking_start_at, booking_end_at
                                 FROM cottage_booking
@@ -84,10 +103,14 @@ if ($method === 'POST' && $path === '/login') {
         http_response_code(400);
         echo json_encode(array('error' => 'Enter the cottage\'s id'));
     }
-} else if ($method === 'GET' && $path === '/get_bookings') {
+} 
+else if ($method === 'GET' && $path === '/get_bookings') {
+    checkAuth($pdo);
+
     $stmt = $pdo->query("SELECT * FROM cottage_booking");
     echo json_encode($stmt->fetchAll());
-} else if ($method === 'POST' && $path === '/add_booking') {
+} 
+else if ($method === 'POST' && $path === '/add_booking') {
     $data = json_decode(file_get_contents('php://input'), true);
     if (isset($data['cottageId']) && isset($data['name']) && isset($data['phoneNumber']) && isset($data['startDate']) && isset($data['endDate'])) {
         $stmt = $pdo->prepare("INSERT INTO cottage_booking (cottage_id, client_name, client_phone_number, booking_start_at, booking_end_at)
@@ -103,7 +126,10 @@ if ($method === 'POST' && $path === '/login') {
         http_response_code(400);
         echo json_encode(array('error' => 'Unprocessable entity'));
     }
-} else if ($method === 'DELETE' && $path === '/delete_booking') {
+} 
+else if ($method === 'DELETE' && $path === '/delete_booking') {
+    checkAuth($pdo);
+
     parse_str(file_get_contents("php://input"), $delete_vars);
     if (isset($delete_vars['booking_id'])) {
         $booking_id = $delete_vars['booking_id'];
@@ -119,7 +145,10 @@ if ($method === 'POST' && $path === '/login') {
         http_response_code(400);
         echo json_encode(array('error' => 'Booking ID is required'));
     }
-} else if ($method === 'PATCH' && strpos($_SERVER['REQUEST_URI'], '/update_booking/') !== false) {
+} 
+else if ($method === 'PATCH' && strpos($_SERVER['REQUEST_URI'], '/update_booking/') !== false) {
+    checkAuth($pdo);
+
     $bookingId = substr($path, strlen('/update_booking/'));
     if (isset($bookingId)) {
         $stmt = $pdo->prepare("UPDATE cottage_booking SET booking_confirmation_date = CURRENT_DATE WHERE booking_id = :id");
@@ -134,7 +163,8 @@ if ($method === 'POST' && $path === '/login') {
         http_response_code(400);
         echo json_encode(array('error' => 'Id is required'));
     }
-} else {
+} 
+else {
     http_response_code(404);
     echo json_encode(array('error' => 'Page not found'));
 }
