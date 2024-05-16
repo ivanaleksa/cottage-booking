@@ -27,3 +27,29 @@ th {
 .actions button {
     margin-right: 5px;
 }
+
+.confirm-btn {
+    border: 0px;
+    background-color: #007a0a;
+    padding: 5px;
+    border-radius: 10px;
+    font-size: 20px;
+    color: white;
+}
+
+.delete-btn {
+    border: 0px;
+    background-color: #64000d;
+    padding: 5px;
+    border-radius: 10px;
+    font-size: 20px;
+    color: white;
+}
+
+.delete-btn:hover {
+    opacity: 0.5;
+}
+
+.confirm-btn:hover {
+    opacity: 0.5;
+}
