@@ -113,11 +113,17 @@ function isDateBooked(date, bookingDates) {
 function isDateRangeBooked(startDate, endDate, bookingDates) {
     const start = new Date(startDate);
     const end = new Date(endDate);
-    return bookingDates.some(booking => {
-        const bookingStart = new Date(booking.booking_start_at);
-        const bookingEnd = new Date(booking.booking_end_at);
-        return (start <= bookingEnd && end >= bookingStart);
-    });
+
+    if (start > end) {
+        return true;
+    }
+    else {
+        return bookingDates.some(booking => {
+            const bookingStart = new Date(booking.booking_start_at);
+            const bookingEnd = new Date(booking.booking_end_at);
+            return (start <= bookingEnd && end >= bookingStart);
+        });
+    }
 }
 
 async function submitBooking(cottageId) {

@@ -8,7 +8,6 @@
     <title>Loading...</title>
 </head>
 <body>
-    <a href="index.html" class="back-link">Back</a>
     <div id="cottage-part">
         <h1 id="cottage-title"></h1>
         <div id="cottage-details"></div>
@@ -17,10 +16,10 @@
         <form id="booking-form" method="post">
             <h2>Book this Cottage</h2>
             <label for="client-name">Name:</label>
-            <input type="text" id="client-name" name="client-name"  style="margin-top: 10px;" required>
+            <input type="text" id="client-name" name="client-name" style="margin-top: 10px;" required>
             <br>
             <label for="client-phone">Number:</label>
-            <input type="tel" id="client-phone" name="client-phone"  style="margin-top: 10px;" required>
+            <input type="tel" id="client-phone" name="client-phone" placeholder="+79501234567" pattern="^\+\d{11}$" style="margin-top: 10px;" required>
             <br>
             <label for="booking-start">Start Date:</label>
             <input type="date" id="booking-start" name="booking-start"  style="margin-top: 10px;" required>
