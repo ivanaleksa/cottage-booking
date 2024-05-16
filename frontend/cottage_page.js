@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 let backUrl = "http://localhost:8080/";
-let bookingDates = []; // Array to store fetched booking dates
+let bookingDates = [];
 
 async function fetchCottageDetails(cottageId) {
     try {
@@ -25,8 +25,8 @@ async function fetchCottageDetails(cottageId) {
         document.title = cottage.cottage_name;
         document.getElementById('cottage-title').textContent = cottage.cottage_name;
         document.getElementById('cottage-details').innerHTML = `
-            <p>Address: ${cottage.cottage_address}</p>
-            <p>Description: ${cottage.cottage_description}</p>
+            <p><b>Address</b>: ${cottage.cottage_address}</p>
+            <p><b>Description</b>: ${cottage.cottage_description}</p>
         `;
     } catch (error) {
         console.error('Error fetching cottage details:', error);

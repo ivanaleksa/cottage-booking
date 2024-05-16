@@ -8,27 +8,34 @@
     <title>Loading...</title>
 </head>
 <body>
-    <h1 id="cottage-title"></h1>
-    <div id="cottage-details"></div>
-    <form id="booking-form" method="post">
-        <h2>Book this Cottage</h2>
-        <label for="client-name">Name:</label>
-        <input type="text" id="client-name" name="client-name" required>
-        <br>
-        <label for="client-phone">Phone Number:</label>
-        <input type="tel" id="client-phone" name="client-phone" required>
-        <br>
-        <label for="booking-start">Start Date:</label>
-        <input type="date" id="booking-start" name="booking-start" required>
-        <br>
-        <label for="booking-end">End Date:</label>
-        <input type="date" id="booking-end" name="booking-end" required>
-        <br>
-        <button type="submit">Submit Booking</button>
-    </form>
-    <div id="booking-dates">
-        <h2>Booked Dates</h2>
-        <div id="calendar-container"></div>
+    <a href="index.html" class="back-link">Back</a>
+    <div id="cottage-part">
+        <h1 id="cottage-title"></h1>
+        <div id="cottage-details"></div>
+    </div>
+    <div id="booking-part">
+        <form id="booking-form" method="post">
+            <h2>Book this Cottage</h2>
+            <label for="client-name">Name:</label>
+            <input type="text" id="client-name" name="client-name"  style="margin-top: 10px;" required>
+            <br>
+            <label for="client-phone">Number:</label>
+            <input type="tel" id="client-phone" name="client-phone"  style="margin-top: 10px;" required>
+            <br>
+            <label for="booking-start">Start Date:</label>
+            <input type="date" id="booking-start" name="booking-start"  style="margin-top: 10px;" required>
+            <br>
+            <label for="booking-end">End Date:</label>
+            <input type="date" id="booking-end" name="booking-end"  style="margin-top: 10px;" required>
+            <br>
+            <div class="submit-btn">
+                <button type="submit" id="sbm-btn">Submit Booking</button>
+            </div>
+        </form>
+        <div id="booking-dates">
+            <h2>Booked Dates</h2>
+            <div id="calendar-container"></div>
+        </div>
     </div>
 </body>
 </html>
