@@ -25,8 +25,8 @@ async function fetchCottageDetails(cottageId) {
         document.title = cottage.cottage_name;
         document.getElementById('cottage-title').textContent = cottage.cottage_name;
         document.getElementById('cottage-details').innerHTML = `
-            <p><b>Address</b>: ${cottage.cottage_address}</p>
-            <p><b>Description</b>: ${cottage.cottage_description}</p>
+            <p><b>Address</b>: ${sanitize(cottage.cottage_address)}</p>
+            <p><b>Description</b>: ${sanitize(cottage.cottage_description)}</p>
         `;
     } catch (error) {
         console.error('Error fetching cottage details:', error);
@@ -121,8 +121,8 @@ function isDateRangeBooked(startDate, endDate, bookingDates) {
 }
 
 async function submitBooking(cottageId) {
-    const name = document.getElementById('client-name').value;
-    const phone = document.getElementById('client-phone').value;
+    const name = sanitize(document.getElementById('client-name').value);
+    const phone = sanitize(document.getElementById('client-phone').value);
     const startDate = document.getElementById('booking-start').value;
     const endDate = document.getElementById('booking-end').value;
 
@@ -156,4 +156,10 @@ async function submitBooking(cottageId) {
         console.error('Error submitting booking:', error);
         alert('Failed to book cottage.');
     }
+}
+
+function sanitize(input) {
+    const element = document.createElement('div');
+    element.innerText = input;
+    return element.innerHTML;
 }
