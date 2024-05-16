@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/styles.css">
+    <script src="scripts/cottage_page.js" defer></script>
+    <title>Loading...</title>
+</head>
+<body>
+    <div id="cottage-part">
+        <h1 id="cottage-title"></h1>
+        <div id="cottage-details"></div>
+    </div>
+    <div id="booking-part">
+        <form id="booking-form" method="post">
+            <h2>Book this Cottage</h2>
+            <label for="client-name">Name:</label>
+            <input type="text" id="client-name" name="client-name" style="margin-top: 10px;" required>
+            <br>
+            <label for="client-phone">Number:</label>
+            <input type="tel" id="client-phone" name="client-phone" placeholder="+79501234567" pattern="^\+\d{11}$" style="margin-top: 10px;" required>
+            <br>
+            <label for="booking-start">Start Date:</label>
+            <input type="date" id="booking-start" name="booking-start"  style="margin-top: 10px;" required>
+            <br>
+            <label for="booking-end">End Date:</label>
+            <input type="date" id="booking-end" name="booking-end"  style="margin-top: 10px;" required>
+            <br>
+            <div class="submit-btn">
+                <button type="submit" id="sbm-btn">Submit Booking</button>
+            </div>
+        </form>
+        <div id="booking-dates">
+            <h2 style="margin-bottom: 0px;">Booked Dates</h2>
+            <div id="calendar-container"></div>
+        </div>
+    </div>
+</body>
+</html>
